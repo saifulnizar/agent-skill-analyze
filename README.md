@@ -58,11 +58,11 @@ curl -fsSL https://raw.githubusercontent.com/Lionparcel/agent-knowledge-workflow
 │  - Language Idioms (Rust, Go, TypeScript, Python)      │
 │  - Compilable Unit & Integration Test Suites           │
 └───────────────────────────┬────────────────────────────┘
-                            │  /implement or Manual Coding
+                            │  Manual Coding
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │             Clean, Production-Ready Code               │
-└───────────────────────────┬────────────────────────────┘
+└────────────────────────────────────────────────────────┘
 ```
 
 ---
