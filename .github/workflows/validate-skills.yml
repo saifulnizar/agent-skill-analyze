@@ -1,0 +1,59 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    name: Validate Skill Definitions & Frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Skills Structure & Frontmatter
+        run: |
+          echo "🔍 Checking skills directory..."
+          FAIL=0
+          for skill_dir in skills/*/; do
+            skill_name=$(basename "$skill_dir")
+            echo "Checking skill: $skill_name"
+            
+            # Check SKILL.md presence
+            if [ ! -f "$skill_dir/SKILL.md" ]; then
+              echo "❌ Error: $skill_dir is missing SKILL.md"
+              FAIL=1
+              continue
+            fi
+            
+            # Check YAML Frontmatter presence
+            first_line=$(head -n 1 "$skill_dir/SKILL.md")
+            if [ "$first_line" != "---" ]; then
+              echo "❌ Error: $skill_dir/SKILL.md does not start with YAML frontmatter (---)"
+              FAIL=1
+              continue
+            fi
+            
+            # Check name field in frontmatter
+            if ! grep -q "^name:" "$skill_dir/SKILL.md"; then
+              echo "❌ Error: $skill_dir/SKILL.md missing 'name:' in frontmatter"
+              FAIL=1
+            fi
+            
+            # Check description field in frontmatter
+            if ! grep -q "^description:" "$skill_dir/SKILL.md"; then
+              echo "❌ Error: $skill_dir/SKILL.md missing 'description:' in frontmatter"
+              FAIL=1
+            fi
+            
+            echo "✅ Skill $skill_name is valid!"
+          done
+          
+          if [ $FAIL -ne 0 ]; then
+            echo "Validation failed!"
+            exit 1
+          fi
+          echo "🎉 All skills validated successfully!"
