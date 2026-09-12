@@ -18,6 +18,7 @@ workspaces/
 *.swp
 *.swo
 *~
+.agents/
 
 # Node / Package manager artifacts (if any tools are added)
 node_modules/
